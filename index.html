@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Talking Head Anime from a Single Image 2: More Expressive (Abridged Version)</title>
+
+    <!-- Bootstrap -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/theme.css" rel="stylesheet">
+
+    <!-- MathJax -->
+    <script>
+    MathJax = {
+	  tex: {
+	    inlineMath: [['$', '$'], ['\\(', '\\)']]
+	  },
+	  svg: {
+	    fontCache: 'global'
+	  }
+	};
+    </script>
+    <script src="mathjax/tex-chtml.js" id="MathJax-script" async></script>    
+    <script type="text/javascript" src="js/jquery-3.5.1.min.js"></script>
+    <script type="text/javascript" src="js/bigfoot.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/bigfoot-default.css">
+  </head>
+  
+  <body> 
+    <div class="container" style="max-width: 640px;">
+    	<span style="visibility: hidden;">
+	      \(
+	      \def\sc#1{\dosc#1\csod}
+	      \def\dosc#1#2\csod{{\rm #1{\small #2}}}
+	      \)
+    	</span>
+      <h1 align="center">&nbsp;</h1>
+      <h1 align="center">2D-Ising model simulation<br>using Monte Carlo simulation<br></h1>
+      <p align="center">
+      <a href="https://kittenk531.github.io/">Ying Chan</a></a>
+      </p>
+      <h1 align="center">&nbsp;</h1>
+    </div>
+
+    <div class="container" style="max-width: 640px;">		
+		<h1>&nbsp;</h1>
+
+		<p><b>Abstract.</b> This code aims to simulate crystal growth using Ising model in 2 dimensions using Wolff algorithm.<p>
+
+    </div>
+
+    <h1>&nbsp;</h1>
+		<h2>1 &nbsp; Motivation</h2>		
+
+		<p>Monte Carlo simulation application helps us to obtain a solution to Ising model.</p>
+
+		<h2>2 &nbsp; Summary of Approach</h2>
+
+		<p>We will come back to this later.</p>
+
+        <h2>3 &nbsp; Theory</h2>
+
+        <h3>3.1 &nbsp; Introduction to statistical mechanics</h3>
+
+        <h3>3.2 &nbsp; Understandng Ising model</h3>
+
+        <h3>3.3 &nbsp; Debye model VS Ising model</h3>
+
+        <h2>4 &nbsp; Wolff algorithm</h3>
+            <p>Unlike the approach of S-W algorithm, wolff algorithm constructs a cluster in which the nearest cluster sites have the same orientation.</p>
+            <p>A random selection of a site in the system and add its near neighbours with the same spin orientation to the cluster th the probability of $p=1-q$</p>
