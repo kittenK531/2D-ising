@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
-  <head>
+
+<head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Talking Head Anime from a Single Image 2: More Expressive (Abridged Version)</title>
+    <title>2D-Ising model simulation</title>
 
     <!-- Bootstrap -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -13,61 +14,266 @@
 
     <!-- MathJax -->
     <script>
-    MathJax = {
-	  tex: {
-	    inlineMath: [['$', '$'], ['\\(', '\\)']]
-	  },
-	  svg: {
-	    fontCache: 'global'
-	  }
-	};
+        MathJax = {
+            tex: {
+                inlineMath: [
+                    ['$', '$'],
+                    ['\\(', '\\)']
+                ]
+            },
+            svg: {
+                fontCache: 'global'
+            }
+        };
     </script>
-    <script src="mathjax/tex-chtml.js" id="MathJax-script" async></script>    
+    <script src="mathjax/tex-chtml.js" id="MathJax-script" async></script>
     <script type="text/javascript" src="js/jquery-3.5.1.min.js"></script>
     <script type="text/javascript" src="js/bigfoot.min.js"></script>
     <link rel="stylesheet" type="text/css" href="css/bigfoot-default.css">
-  </head>
-  
-  <body> 
+</head>
+
+<body>
     <div class="container" style="max-width: 640px;">
-    	<span style="visibility: hidden;">
+        <span style="visibility: hidden;">
 	      \(
 	      \def\sc#1{\dosc#1\csod}
 	      \def\dosc#1#2\csod{{\rm #1{\small #2}}}
 	      \)
     	</span>
-      <h1 align="center">&nbsp;</h1>
-      <h1 align="center">2D-Ising model simulation<br>using Monte Carlo simulation<br></h1>
-      <p align="center">
-      <a href="https://kittenk531.github.io/">Ying Chan</a></a>
-      </p>
-      <h1 align="center">&nbsp;</h1>
+        <h1 align="center">&nbsp;</h1>
+        <h1 align="center">2D-Ising model simulation<br>using Monte Carlo simulation<br></h1>
+        <p align="center">
+            <a href="https://kittenk531.github.io/">Ying Chan</a></a>
+        </p>
+        <h1 align="center">&nbsp;</h1>
     </div>
 
-    <div class="container" style="max-width: 640px;">		
-		<h1>&nbsp;</h1>
+    <div class="container" style="max-width: 640px;">
+        <h1>&nbsp;</h1>
 
-		<p><b>Abstract.</b> This code aims to simulate crystal growth using Ising model in 2 dimensions using Wolff algorithm.<p>
+        <p><b>Abstract.</b> By making use of numerical simulations, with Monte Carlo algorithm for Potts spin models, hopes to recover the physical phenomenon of phase transitions. Different updating algorithms including Metropolis and Wolff were implemented
+            to 50\(\times\)50 square lattice to evaluate efficiency near critical temperature.
+            <p>
 
     </div>
 
     <h1>&nbsp;</h1>
-		<h2>1 &nbsp; Motivation</h2>		
+    <h2>1 &nbsp; Introduction</h2>
 
-		<p>Monte Carlo simulation application helps us to obtain a solution to Ising model.</p>
+    <p>With the use of Markov Chains, this article aims to make use of Ising model to regenerate the randomness of spin alignment under different temperatures. The effective hamiltonian of the ising model is $$ H = -J \sum_{\left
+        < ij \right>} S_i S_j $$ where critical phenonmenons can only be observed when external magnetic field is insignificant implying that the magnetic moment does not play a significant role s.t. $$ -\mu \sum_j h_j S_j \rightarrow 0$$.</p>
 
-		<h2>2 &nbsp; Summary of Approach</h2>
+    <p>In an ideal ferromagnet, in the absence of an external field, the neighbouring dipoles align parallel tro each other. In order to predict the thermal behaviour of the system, a partition function is calculated by the following expression $$ Z = \sum_{\{S_i\}}
+        \exp \left(\beta H\right)$$, where \(\beta = 1/k T\), which is the sum over all possible sets of dipole alignments.</p>
 
-		<p>We will come back to this later.</p>
+    <h3>1.1 &nbsp; Metropolis algorithm</h3>
+    <p>The main idea of this local updating algorithm is known as Monte Carlo cummation with importance sampling. This algothm generates a subset of syastem states in which lower energy states occur more frequently than higher energy states. The transitio
+        probability is thus $$ \frac{W(1\rightarrow 2)}{W(2\rightarrow 1)} = \frac{(1/N)\exp\left\{-(U_2-U_1)/kT\right\}}{(1/N)} = \frac{\exp\left\{-U_2/kT\right\}}{\exp\left\{-U_1/kT\right\}}$$, which is the ratio of the Boltzmann factors of the two
+        states.
+    </p>
 
-        <h2>3 &nbsp; Theory</h2>
+    <p> Thus, considering multiple states has transitted in any number of steps, the transition probability remains $$ \frac{W(1\rightarrow \dots\rightarrow 2)}{W(2\rightarrow \dots \rightarrow 1)} = \frac{\exp\left\{-U_2/kT\right\}}{\exp\left\{-U_1/kT\right\}}$$.
+        This speaks for the implementation of algorithm where many iterations of the steps generate many times for every states so the the guarantee of subset generated is an accurate representation for the full collection of all system states. In this
+        scenario, the main concern is that the random states generated provides an accurate illustration of the expected energy and magnetization of the system. It is thus expected that a long time is needed to generate other probable states that differ
+        significantly, that all dipoles are flipped. </p>
 
-        <h3>3.1 &nbsp; Introduction to statistical mechanics</h3>
+    <p align="center">
+        <table align="center">
+            <tr>
+                <td align="center">
+                    <a href="iocal/beta0.4.gif"><img src="images/local/0.40/iter2328_20628.gif" width="300"></a>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <b>Figure 1.1</b> Local updating scheme: Metropolis algorithm with input parameters \(\{N = 50, \beta = 0.4, J = 1.0\}\)
+                </td>
+            </tr>
+        </table>
+    </p>
 
-        <h3>3.2 &nbsp; Understandng Ising model</h3>
+    <h3>1.2 &nbsp; Wolff algorithm</h3>
+    <p> Using the ideas from percolation theory, whole cluster spins are enabled to move in one step which improves the critical aslowing down from local updating scheme. About critical temperature, the spins display critical fluctuations where large aligned
+        apin domains appear. This phenonmenon of critical slowing down reflects the difficulty to change the magnetization of a correlated spin cluster where one center spin has 4 nearest neighbours.</p>
 
-        <h3>3.3 &nbsp; Debye model VS Ising model</h3>
+    <p align="center">
+        <table align="center">
+            <tr>
+                <td align="center">
+                    <a href="block/beta0.4.gif"><img src="images/block/0.40/iter606_182252.gif" width="600"></a>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <b>Figure 1.2</b> Block updating scheme: Wolff algorithm with input parameters \(\{N = 50, \beta = 0.4, J = 1.0\}\)
+                </td>
+            </tr>
+        </table>
+    </p>
 
-        <h2>4 &nbsp; Wolff algorithm</h3>
-            <p>Unlike the approach of S-W algorithm, wolff algorithm constructs a cluster in which the nearest cluster sites have the same orientation.</p>
-            <p>A random selection of a site in the system and add its near neighbours with the same spin orientation to the cluster th the probability of $p=1-q$</p>
+    <p>The probability to form a cluster of spins in state A before the Wolff flip is the same as state B after the flip. The probability to not add to the cluster is \(1-P_{add}\). \(m\) stands for the non-added aligned spins to cluster in state A while
+        \( n\) stands for the non-added aligned spins to cluster in state B (after flipping all at once) as shown in the figure below.
+    </p>
+
+    <p align="center">
+        <table align="center">
+            <tr>
+                <td align="center">
+                    <a href="block/illu.png"><img src="images/block/illustration.png" width="500"></a>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <b>Figure 1.3</b> Illustration adopted from (Walter, 2014)
+                </td>
+            </tr>
+        </table>
+    </p>
+
+    <p>The transition probability is then written as the following expression$$\frac{W\left(A\rightarrow B\right)}{W\left(B\rightarrow A\right)} = \left(1 - P_{add}\right)^{m-n}$$, where by preserving the detailed balance condition, the transition probability
+        (W) condition is rewritten as $$ \frac{W\left(A\rightarrow B\right)\cdot Y\left(A\rightarrow B\right)}{W\left(B\rightarrow A\right)\cdot Y\left(B\rightarrow A\right)} = \left(1 - P_{add}\right)^{m-n} \frac{Y\left(A\rightarrow B\right)}{Y\left(B\rightarrow
+        A\right)} = \exp\left\{-\beta(E_B - E_A)\right\}$$With \(E_B - E_A = 2J(m-n)\), the acceptance probability ratio remains $$\frac{Y\left(A\rightarrow B\right)}{Y\left(B\rightarrow A\right)} = \left[(1-P_{add})\exp\left\{-2\beta J\right\}\right]^{n-m}$$
+        Therefore, choosing\(P_{add} = 1-\exp\left\{2\beta J\right\}\), the acceptance probabilities \(Y\left(A\rightarrow B\right) = Y\left(B\rightarrow A\right) = 1\) which flips the spin automatically when the cluster is formed. Thus, one cluster iteration
+        isequivalent to one iteration in Wolff iteration, however, for comparison sake, it is not the case in this implementation, which will be addressed in the later sections.
+    </p>
+
+    <h2>2 &nbsp; Simulation details</h2>
+    <p>In this article, only ferromagnetic \(J=1\) properties are investigated, due to the limitation of computating resources, only the size of 2500 lattice sites in square lattice is being looked into \(N = 50\). It is therefore a little investigation
+        on the iteration convergence times from varying \(\beta\) of near \(\beta_c\). By using the scaled quantity, we can always write $$ \beta_c \equiv \frac{1}{T_c}$$. The critical (transition) temperature of 2D lattice is \(2.269\) in scaled unit
+        \(\epsilon/k\) (Walter, 2014), where the inverse temperatureis approximately 0.4407. From Hoffmann, as shown in the following figure, the critical inverse temperature lies between 0.4 and 0.5.
+    </p>
+
+    <p align="center">
+        <table align="center">
+            <tr>
+                <td align="center">
+                    <a href="local/Flow_chart.png"><img src="images/Hoffmann_crit_beta.png" width="300"></a>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <b>Figure 2.1</b> Finit-size scaling behaviour of the specific heat of the 2D Isingmodel on \(L\times L\) lattices to different inverse temperatures.
+                </td>
+            </tr>
+        </table>
+    </p>
+    <h3>2.1 &nbsp; Local updating scheme</h3>
+    <p align="center">
+        <table align="center">
+            <tr>
+                <td align="center">
+                    <a href="local/Flow_chart.png"><img src="images/local/Flow_chart_local.png" width="400"></a>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <b>Figure 2.2</b> Local updating scheme flow chart
+                </td>
+            </tr>
+        </table>
+    </p>
+    <p>Since the standard Metropolis Algorithm is relaized y the local updates of single spin, by the auto correlation, the probability of acceptance is as shown below. $$ W(\{S_i\}\rightarrow\{S_i'\}) = \begin{cases} {\exp\{-\beta \Delta E\}} &, \Delta
+        E > 0\\ {1} &, \Delta E \leq 0 \end{cases}$$ </p>
+
+    <h4>2.11 &nbsp; Preparation and Initialization</h4>
+    <p>The Initialization of lattice array is simply a 2D array of size \(N+2\times N+2\) of elements 1 and -1 using build-in psuedo random number generator. The edge of the lattice is not visible to the user, which only serve as calculation for nearest
+        neighbour interaction energy.</p>
+    <p align="center">
+        <table align="center">
+            <tr>
+                <td align="center">
+                    <a href="init_lattice.png"><img src="images/init_lattice.jpg" width="200"></a>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <b>Figure 2.3</b> initialized lattice with expanded invisible edge
+                </td>
+            </tr>
+        </table>
+    </p>
+    <h5>2.11a &nbsp; Periodic Boundary condition </h5>
+    <p> To apply boundary condition, simply copy the edge to the opposite side of invisible edge. Since the four outermost corners will not be used in the calculation, which are thus unimportant.
+    </p>
+
+    <p align="center">
+        <table align="center">
+            <tr>
+                <td align="center">
+                    <a href="pbc.png"><img src="images/pbc_init.jpg" width="200"></a>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <b>Figure 2.3</b> Wolff algorithm flow chart
+                </td>
+            </tr>
+        </table>
+    </p>
+    <h4>2.12 &nbsp; Precalculation of energy and corresponding boltzmann factors</h4>
+    <p>Considering only nearest neighbours, the change of energy \(\Delta E\) only has 5 possibilies, $$\Delta E \in \{-8J, -4J, 0J, +4J, +8J\}$$, to prevent calculating the boltzmann factor repeatedly, the pre-calculatiuon stores these values and their
+        corresponding boltzmann value into an array for later extraction.
+
+        <h4>2.13 &nbsp; Main iteration</h4>
+        At (r, c): correspond to the specific coordinate of real lattice (not include the expanded edges)
+        <ol>
+            <li>if \(\Delta E
+                < 0\) or \(\xi < \exp\{-\beta \Delta E\}\) then update \(S_i \rightarrow -S_i\)</li>
+
+                    <li>Move to next (r, c)</li>
+        </ol>
+        1 complete cycle reach every lattice site once. If the energy of the lattice is not converged to minimum, the next iteration begins, until minimum energy is achieved.
+    </p>
+
+    <h4>2.13 &nbsp; Spiral out sequence loop</h4>
+    <p>It is essential to loop through each lattice site without revisiting the visited site. For the cluster algorithm, it is essential to have a fixed visiting agenda such that each outer neighbour sites are visited. The required output for the loop run
+        depends also on the random seed as the center lattice site for the crystal to grow around it.</p>
+    <p align="center">
+        <table align="center">
+            <tr>
+                <td align="center">
+                    <a href="count.jpg"><img src="images/count.jpg" width="400"></a>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <b>Figure 2.5</b> Desired output for thesequence of coordinates/ sites visited.\(s\) stands for seed which has no meaning but being the starting lattice site. The figure shows two iteration run for the same lattice with different center.
+                    (seed is only important in cluster algorithm.) Which will be further elaborated in the next subsection.
+                </td>
+            </tr>
+        </table>
+    </p>
+    <p>This is the reason why from Figure 1.1, the flipping surrounds one random seed. In metropolis algorithm, there is no restriction to the order of the site visited, as long as each site are visited repeatedly. Thus, this is one of the visualization/
+        implementation to demonstrate the spiral out sequence.</p>
+
+    <h3>2.2 &nbsp; Block updating scheme: Wolff Algorithm</h3>
+    <p align="center">
+        <table align="center">
+            <tr>
+                <td align="center">
+                    <a href="block/Flow_chart.png"><img src="images/block/Flow_chart.png" width="500"></a>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <b>Figure 2.6</b> Wolff algorithm flow chart
+                </td>
+            </tr>
+        </table>
+    </p>
+
+    <p>We will come back to this later.</p>
+
+    <h2>3 &nbsp; Theory</h2>
+
+    <h2>4 &nbsp; Wolff algorithm</h3>
+        <p>Unlike the approach of S-W algorithm, wolff algorithm constructs a cluster in which the nearest cluster sites have the same orientation.</p>
+        <p>A random selection of a site in the system and add its near neighbours with the same spin orientation to the cluster th the probability of \(p=1-q\)</p>
+
+        <script src="js/bootstrap.bundle.min.js"></script>
+        <script>
+            $.bigfoot();
+        </script>
+</body>
+
+</html>
