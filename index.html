@@ -57,7 +57,7 @@
 
     </div>
 
-    <div class="container" style="max-width: 760px;">
+    <div class="container" style="max-width: 800px;">
         <h1>&nbsp;</h1>
         <h2>1 &nbsp; Introduction</h2>
 
@@ -213,10 +213,10 @@
         </p>
         <h4>2.12 &nbsp; Precalculation of energy and corresponding boltzmann factors</h4>
         <p>Considering only nearest neighbours, the change of energy \(\Delta E\) only has 5 possibilies, $$\Delta E \in \{-8J, -4J, 0J, +4J, +8J\}$$, to prevent calculating the boltzmann factor repeatedly, the pre-calculatiuon stores these values and their
-            corresponding boltzmann value into an array for later extraction.
+            corresponding boltzmann value into an array for later extraction.</p>
 
-            <h4>2.13 &nbsp; Main iteration</h4>
-            At (r, c): correspond to the specific coordinate of real lattice (not include the expanded edges)
+        <h4>2.13 &nbsp; Main iteration</h4>
+        <p>At (r, c): correspond to the specific coordinate of real lattice (not include the expanded edges)
             <ol>
                 <li>if \(\Delta E
                     < 0\) or \(\xi < \exp\{-\beta \Delta E\}\) then update \(S_i \rightarrow -S_i\)</li>
@@ -263,11 +263,77 @@
             </table>
         </p>
 
-        <p>We will come back to this later.</p>
+        <p>To preserve the detailed balance of Metropolis algorithm, it is needed that the acceptance probability follows $$ W(\{S_i\}\rightarrow\{S_i'\}) = 1 - \exp\{-2\beta J\}$$
+        </p>
 
-        <h2>3 &nbsp; Theory</h2>
+        <h4>2.21 &nbsp; Initialization and preparation</h4>
+        <p> The initialization of lattice for periodic boundary condition is no different than one mentioned section 2.11a. In cluster updating scheme, the lattice, flipped and cluster list array are global arrays to be prepared which is updated along the
+            iterations. This step also includes generation of the starting seed.
+            <ul>
+                <li>lattice: a 2D array that stores values of 1/0 or 1/-1</li>
 
-        <h2>4 &nbsp; Wolff algorithm</h3>
+                <li>flipped: a 2D array with same size to lattice only stores flipped spin values to be 1 (black)</li>
+
+                <li>cluster list (local): a 2D array of size (num, 2) where num is the number of to be flipped cluster member, by each indicies of num stores one set of the (r, c) of lattice site.</li>
+            </ul>
+
+        </p>
+
+        <h4>2.22 &nbsp; Local updating: growth of cluster</h4>
+        <p> With the use of sequence loop from section 2.13, with the inherited seed from the initialization, the order of visiting sites are prepared. To determine whether the site is to be flipped must pass the following conditions, (cy, cx) is the currentlattice
+            site (from sequence loop), (y, x) is the seed site coordinates
+            <ul>
+                <li>is nearest neighbours</li>
+
+                <li>align with seed spin</li>
+
+                <li>random importance sampling: \(\xi
+                    < W(\{S_i\}\rightarrow\{S_i '\})\)</li>
+            </ul>
+            If all criteria were met, only with the site (cy, cx) be appended to the cluster list. The list of cluster member will be flipped all at once after all the nearest neighbours are examined. Below shows the example after one local update.
+        </p>
+        <p align="center">
+          <table align="center">
+              <tr>
+                  <td align="center">
+                      <a href="block/block_local.jpg"><img src="images/block/block_local.jpg" width="400"></a>
+                  </td>
+              </tr>
+              <tr>
+                  <td>
+                      <b>Figure 2.8</b> Example of 1 local updating iteration. Left: initial configuration of spin (A) Middle: after flipped (B) Right: formed crystal after one iteration
+                  </td>
+              </tr>
+          </table>
+      </p>
+      <h4>2.23 &nbsp; Flipping</h4>
+      <p>After each local update, it will be flipped once the local cluster list site by site. Why not flip after the whole cluster is appended to one list? Since the random initializatio of spin configuration is adopted, it is necessary for us to compare the number of steps required for the system energy to converge to metropolis local updating scheme. If adopting the flip of whole cluster as count, then the number of step will solely depend on the initial configuration of the system. Only in this way will include the information of repeatedly arriving at the same site and trying to flip the unflipped spin in later iterations.</p>
+
+      <p>Practically speaking, the flipping of individual local iterations should not affect the number of cluster iteration if the energy eventually converges, as whole cluster iterations only depend on the initial configuration. But this is the only way to demonstrate the transition probability where there exist nearest neighbours being not flipped but aligned.</p>
+
+      <p>Thus, from the previous iteration, sweep through the array of coordiates of lattice sites to change the sign of the spin. (Which cannot be at the same instant as it is not a physical process, the same time imply that in ONE iteration times, all lattice sites in the cluster list is flipped.</p>
+
+      <h4>2.24 &nbsp; Block updating: cluster iteration</h4>
+      <p>Previously, in section 2.22 and 2.23, has given detailed description to the workflow of the red loop. As the goal is to minimize the spin interaction energy, the while loop condition asks if there are any nearest neighbours that is aligned. This is equivalent to asking if the island formed is complete as produced initially from the initial configuration. If not, a new seed will be chosen from the outermost cluster members of the formed crystal to perform "local updating" (2.22, 2.23) until the whole cluster is formed. This is the yellow while loop indicated in the work flow.</p>
+
+      <p align="center">
+        <table align="center">
+            <tr>
+                <td align="center">
+                    <a href="whole_cluster.gif"><img src="images/block/grow_20.GIF" width="600"></a>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <b>Figure 2.9</b> Example of 1 cluster iteration.
+                </td>
+            </tr>
+        </table>
+    </p>
+
+        <h2>3 &nbsp; Result</h2>
+
+        <h2>4 &nbsp; Discussion</h3>
             <p>Unlike the approach of S-W algorithm, wolff algorithm constructs a cluster in which the nearest cluster sites have the same orientation.</p>
             <p>A random selection of a site in the system and add its near neighbours with the same spin orientation to the cluster th the probability of \(p=1-q\)</p>
 
