@@ -329,13 +329,187 @@
                 </td>
             </tr>
         </table>
-    </p>
+      </p>
+
+        <h4>2.25 &nbsp; Energy minimization</h4>
+        <p>It is important to bear in mind that one cluster is independent to one another, thus the global cluster list undergoes clearence for each new cluster iteration. So the while condition is 
+          <ul>
+            <li>number of unflipped spin \(>0\)</li>
+          </ul>
+        An a new seed is chosen among unflipped spin lattice sites.
+        </p>
+
+        <p align="center">
+          <table align="center">
+              <tr>
+                  <td align="center">
+                      <a href="block/beta0.30.gif"><img src="images/block/0.30/iter793_19054.gif" width="600"></a>
+                  </td>
+              </tr>
+              <tr>
+                <td align="center">
+                <a href="block/beta0.40.gif"><img src="images/block/0.40/iter606_182252.gif" width="600"></a>
+              </td></tr>
+              <tr>
+                <td align="center">
+                  <a href="block/beta0.50.gif"><img src="images/block/0.50/iter527_182157.gif" width="600"></a>
+                </td>
+              </tr>
+              <tr>
+                  <td>
+                      <b>Figure 2.11</b> Example of whole growth of crystals of up: \(\{N = 50, \beta = 0.3, J = 1.0\}\), middle: \(\{N = 50, \beta = 0.4, J = 1.0\}\), low: \(\{N = 50, \beta = 0.5, J = 1.0\}\)
+                  </td>
+              </tr>
+          </table>
+        </p>
+        
 
         <h2>3 &nbsp; Result</h2>
+        <p>Both the local and block updating scheme demonstrates energy minimization.</p>
+        <h3>3.1 &nbsp; Local updating scheme</h3>
+        <p align="center">
+          <table align="center">
+              <tr>
+                  <td align="center">\(\beta\)</td>
+                  <td align="center">0.1</td> <td align="center">0.2</td> <td align="center">0.3</td> <td align="center">0.4</td> <td align="center">0.41</td> <td align="center">0.42</td> <td align="center">0.43</td> <td align="center">0.44</td> <td align="center">0.45</td> <td align="center">0.46</td> <td align="center">0.47</td> <td align="center">0.48</td> <td align="center">0.49</td> <td align="center">0.50</td>
+              </tr>
+              <tr>
+                <td align="center">\(i\)</td>
+                <td align="center">5060</td> <td align="center">5804</td> <td align="center">6790</td> <td align="center">7281</td> <td align="center">7189</td> <td align="center">7659</td> <td align="center">7037</td> <td align="center">7043</td> <td align="center">7561</td> <td align="center">7667</td> <td align="center">7466</td> <td align="center">7575</td> <td align="center">7050</td> <td align="center">7243</td>
+              </tr>
+              <tr>
+                <td align="center">\(\beta\)</td>
+                <td align="center">0.60</td> <td align="center">0.70</td> <td align="center">0.80</td> <td align="center">0.90</td> <td align="center">1.00</td> <td align="center">1.20</td> <td align="center">1.30</td> <td align="center">1.40</td>
+              </tr>
+              <tr>
+                <td align="center">\(i\)</td>
+                <td align="center">7346</td> <td align="center">7923</td> <td align="center">8093</td> <td align="center">8092</td> <td align="center">7737</td> <td align="center">7792</td> <td align="center">8201</td> <td align="center">8363</td>
+              </tr>
+              
+          </table>
+        </p>
+        <p><table><tr>
+          <td>
+              <b>Table 3.1</b> average converge iteration times against inverse temperature spectrum over 36 runs
+          </td>
+      </tr></table></p>
+      <p align="center">
+        <table align="center">
+            <tr>
+                <td align="center">
+                    <a href="local/overall.png"><img src="images/local/overall.png" width="400"></a>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <b>Figure 3.1</b> average converge iteration times against inverse temperature spectrum over 36 runs (interpolation done by spline from scipy library)
+                </td>
+            </tr>
+        </table>
+      </p>
+      <p>It is seen that there is ageneral increasing trend in the number of iteration times when increasing inverse temperature. At lower temperature, the acceptance probability lowers, which thus takes more iteration times to revisit the lattice sites in order to align all the spins.</p>
+      
+      <p align="center">
+        <table align="center">
+            <tr>
+                <td align="center"><a href="local/zoom.png"><img src="images/local/zoom_3.png" width="400"></a></td>
+            </tr>
+            <tr>
+                <td>
+                    <b>Figure 3.3</b> average converge iteration times against near critical inverse temperature spectrum over 36 runs 
+                </td>
+            </tr>
+        </table>
+      </p>
+      <p>Due to the lack of computation power, not a particularly \(d\beta\) can be tested. From the above plot, the highest number of iteration times by interpolation is \(\beta \approx 0.457\) which is not too close to the theoretical value. It also appears that at around \(\beta\approx 0.42\) the iteration times also is very high, which can be accounted by the step size and number of trials being not enough to get a reasonable result.</p>
 
-        <h2>4 &nbsp; Discussion</h3>
-            <p>Unlike the approach of S-W algorithm, wolff algorithm constructs a cluster in which the nearest cluster sites have the same orientation.</p>
-            <p>A random selection of a site in the system and add its near neighbours with the same spin orientation to the cluster th the probability of \(p=1-q\)</p>
+      <h3>3.2 &nbsp; Block updating scheme</h3>
+      <p align="center">
+        <table align="center">
+            <tr>
+                <td align="center">\(\beta\)</td>
+                <td align="center">0.35</td> <td align="center">0.36</td> <td align="center">0.37</td> <td align="center">0.38</td> <td align="center">0.39</td>  <td align="center">0.4</td> <td align="center">0.41</td> <td align="center">0.42</td>
+            </tr>
+            <tr>
+              <td align="center">\(i\)</td>
+              <td align="center">237</td> <td align="center">222</td> <td align="center">220</td> <td align="center">214</td> <td align="center">200</td> <td align="center">214</td> <td align="center">206</td> <td align="center">200</td>
+            </tr>
+            <tr>
+              <td align="center">\(\beta\)</td>
+              <td align="center">0.43</td> <td align="center">0.44</td> <td align="center">0.45</td> <td align="center">0.46</td> <td align="center">0.47</td> <td align="center">0.48</td> <td align="center">0.49</td> <td align="center">0.50</td>
+            </tr>
+            <tr>
+              <td align="center">\(i\)</td>
+              <td align="center">193</td> <td align="center">188</td> <td align="center">188</td> <td align="center">179</td> <td align="center">172</td> <td align="center">164</td> <td align="center">172</td> <td align="center">167</td>
+            </tr>
+            
+        </table>
+      </p>
+      <p align="center">
+        <table align="center">
+            <tr>
+                <td align="center">
+                    <a href="block/compare.png"><img src="images/block/block_stat.png" width="400"></a>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <b>Figure 3.4</b> average converge iteration times against inverse temperature spectrum over 6 runs
+                </td>
+            </tr>
+        </table>
+      </p>
+      <p>It can be seen that the general trend around range of \(\beta \in \left[0.35, 0.50\right]\) demonstrates a decreasing trend with increasing inverse temperature. It makes sense if we take a look at the form of the probability, the accpeptance probability decreases according to increasing inverse temperature \(\beta\).</p>
+      <p> Around the 2D-Ising model critical inverse temperature, there is no sudden peak which shows that critical slowing down in not that prominant using the cluster update algorithm. </p>
+
+        <h2>4 &nbsp; Discussion</h2>
+          <h3>4.1 &nbsp; Results comparison</h3>
+          <p>Since the iteration times between the two algorithms are not comparable by magnitude, that differs by an order of at least \(10^1\), only the comparison of trends may bring some conclusions.</p>
+          <p align="center">
+            <table align="center">
+                <tr>
+                    <td align="center">
+                        <a href="local/compare.png"><img src="images/local/compare.png" width="400"></a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <b>Figure 4.1</b> average converge iteration times against inverse temperature spectrum over 36 runs
+                    </td>
+                </tr>
+            </table>
+          </p>
+          <p>By plotting the local upadting scheme in the same range of inverse temperature, it can be seen that the iteration times taken to converge in local updating scheme around critical temperature is quite stable while is steep considering the cluster updating scheme. </p>
+          <p>However, this conclusion is not strong as the data gathered do not have a large enough sample size.</p>
+          <h4>4.1a &nbsp; Runtime and optimization</h4>
+          <p>Even though the number of iteration times of local updating scheme is much larger than the cluster updating scheme, it actually takes much less time for running.</p>
+          <p>Optimization to cluster updating scheme was making use of mpi (pool.starmap) to running a spectrum of inverse temperatures. Algorithm-wise, the condition of while loop was changed from a more time-consuming function generating a binary output, to the current use of library numpy to calculation of energy convergence.</p>
+          
+          <p>It is also discovered that both algorithms if to require generation of GIF files became I/O bound which greatly increase the computation time.</p>
+          <h4>4.1b &nbsp; Computational resources</h4>
+          <p>The computing resources to generating the resuls are listed as follows:
+            <ul>
+              <li>MacBook Air (OS: macOS 10.12): 2 * 1.60 GHz Intel Core i5</li>
+              <li>MacBook Air (OS: Ubuntu 16,04): 2 * 1.60 GHz Intel Core i5</li>
+              <li>MacBook Air (OS: macOS 11.52): 2 * 1.30 GHz Dual-Core Intel Core i5</li>
+            </ul>
+          </p>
+          <h3>4.2 &nbsp; Improvement</h3>
+          <p>Increasing the sample size may provide a more precise and accurate conclusion.</p>
+          <h3>4.3 &nbsp; Future works</h3>
+          <p>In this article, the observables heat capacities are not calculated. Nor the investigation of exponent relationship to different algorthims. These might be developed later.</p>
+          <h2>5 &nbsp; References</h2>
+          <p>
+            <ul>
+              <li>J. C.Walter and G.T. Barkema, An introduction to Monte Carlo methods, 2014</li>
+              <li>K. H. Hoffmann and M. Schreiber, Computational physics: selected methods, simple excercises, simple applications, New York, 1996</li>
+              <li>Ulli Wolff, Collective Monte Carlo Updating for Spin Systems, 1988</li>
+              <li>Daniel V. Schroeder, An Introduction to Thermal Physics</li>
+            </ul>
+          </p>
+
+          
+          
 
     </div>
 
